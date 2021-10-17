@@ -1,0 +1,262 @@
+<!--
+  Copyright (c) 2006-2014, JGraph Ltd
+  
+  Handles example for mxGraph. This example demonstrates using mxHandle to change custom styles interactively.
+-->
+<html>
+<head>
+	<title>Handles example for mxGraph</title>
+
+	<!-- Sets the basepath for the library if not in same directory -->
+	<script type="text/javascript">
+		 mxBasePath = 'https://jgraph.github.io/mxgraph/javascript/src';
+	</script>
+
+  <!-- Loads and initializes the library -->
+  <script type="text/javascript" src="https://jgraph.github.io/mxgraph/javascript/src/js/mxClient.js"></script>
+
+	<!-- Example code -->
+	<script type="text/javascript">
+		function MyShape()
+		{
+			mxCylinder.call(this);
+		};
+	
+		mxUtils.extend(MyShape, mxCylinder);
+
+		MyShape.prototype.defaultPos1 = 20;
+		MyShape.prototype.defaultPos2 = 60;
+		
+		MyShape.prototype.getLabelBounds = function(rect)
+		{
+		 	var pos1 = mxUtils.getValue(this.style, 'pos1', this.defaultPos1) * this.scale;
+		 	var pos2 = mxUtils.getValue(this.style, 'pos2', this.defaultPos2) * this.scale;
+
+		 	return new mxRectangle(rect.x, rect.y + pos1, rect.width, Math.min(rect.height, pos2) - Math.max(0, pos1));
+		};
+		
+		MyShape.prototype.redrawPath = function(path, x, y, w, h, isForeground)
+		{
+		 	var pos1 = mxUtils.getValue(this.style, 'pos1', this.defaultPos1);
+		 	var pos2 = mxUtils.getValue(this.style, 'pos2', this.defaultPos2);
+		 	var polycords = JSON.parse(mxUtils.getValue(this.style, 'polyCoords'));
+
+			if (isForeground)
+			{
+				// if (pos1 < h)
+				// {
+				// 	path.moveTo(0, pos1);
+				// 	path.lineTo(w, pos1);
+				// }
+				
+				// if (pos2 < h)
+				// {
+				// 	path.moveTo(0, pos2);
+				// 	path.lineTo(w, pos2);
+				// }
+
+                path.moveTo(polycords[0][0], polycords[0][1]);
+                path.lineTo(polycords[1][0], polycords[1][1])
+
+                path.moveTo(polycords[1][0], polycords[1][1]);
+                path.lineTo(polycords[2][0], polycords[2][1])
+                
+                path.moveTo(polycords[2][0], polycords[2][1]);
+                path.lineTo(polycords[3][0], polycords[3][1])
+                
+                path.moveTo(polycords[3][0], polycords[3][1]);
+                path.lineTo(polycords[0][0], polycords[0][1])
+
+			}
+			else
+			{
+				path.rect(0, 0, w, h);
+			}
+		};
+
+		mxCellRenderer.registerShape('myShape', MyShape);
+		
+		mxVertexHandler.prototype.createCustomHandles = function()
+		{
+			if (this.state.style['shape'] == 'myShape')
+			{
+				// Implements the handle for the hndr 
+				var hndr1 = new mxHandle(this.state);
+                var coords = JSON.parse(mxUtils.getValue(this.state.style, 'polyCoords'));
+				hndr1.getPosition = function(bounds)
+				{
+					// var pos1 = Math.max(0, Math.min(bounds.height, parseFloat(mxUtils.getValue(this.state.style, 'pos1', MyShape.prototype.defaultPos1))));
+					// var pos2 = Math.max(pos1, Math.min(bounds.height, parseFloat(mxUtils.getValue(this.state.style, 'pos2', MyShape.prototype.defaultPos2))));
+					
+					return new mxPoint(bounds.x + coords[0][0], bounds.y + coords[0][1]);
+				};
+				hndr1.setPosition = function(bounds, pt)
+				{
+					coords[0][0] = pt.x - bounds.x;
+                    coords[0][1] = pt.y - bounds.y;					
+					this.state.style['polyCoords'] = JSON.stringify(coords);
+				};
+				hndr1.execute = function()
+				{
+					this.copyStyle('polyCoords');
+				}
+				hndr1.ignoreGrid = true;
+
+                var hndr2 = new mxHandle(this.state);
+                var coords = JSON.parse(mxUtils.getValue(this.state.style, 'polyCoords'));
+				hndr2.getPosition = function(bounds)
+				{
+					return new mxPoint(bounds.x + coords[1][0], bounds.y + coords[1][1]);
+				};
+				hndr2.setPosition = function(bounds, pt)
+				{
+					coords[1][0] = pt.x - bounds.x;
+                    coords[1][1] = pt.y - bounds.y;					
+					this.state.style['polyCoords'] = JSON.stringify(coords);
+				};
+				hndr2.execute = function()
+				{
+					this.copyStyle('polyCoords');
+				}
+				hndr2.ignoreGrid = true;
+
+                var hndr3 = new mxHandle(this.state);
+                var coords = JSON.parse(mxUtils.getValue(this.state.style, 'polyCoords'));
+				hndr3.getPosition = function(bounds)
+				{
+					return new mxPoint(bounds.x + coords[2][0], bounds.y + coords[2][1]);
+				};
+				hndr3.setPosition = function(bounds, pt)
+				{
+					coords[2][0] = pt.x - bounds.x;
+                    coords[2][1] = pt.y - bounds.y;					
+					this.state.style['polyCoords'] = JSON.stringify(coords);
+				};
+				hndr3.execute = function()
+				{
+					this.copyStyle('polyCoords');
+				}
+				hndr3.ignoreGrid = true;
+
+                var hndr4 = new mxHandle(this.state);
+                var coords = JSON.parse(mxUtils.getValue(this.state.style, 'polyCoords'));
+				hndr4.getPosition = function(bounds)
+				{
+					return new mxPoint(bounds.x + coords[3][0], bounds.y + coords[3][1]);
+				};
+				hndr4.setPosition = function(bounds, pt)
+				{
+					coords[3][0] = pt.x - bounds.x;
+                    coords[3][1] = pt.y - bounds.y;					
+					this.state.style['polyCoords'] = JSON.stringify(coords);
+				};
+				hndr4.execute = function()
+				{
+					this.copyStyle('polyCoords');
+				}
+				hndr4.ignoreGrid = true;
+
+				return [hndr1, hndr2, hndr3, hndr4];
+			}
+			
+			return null;
+		};
+		
+		mxVertexHandler.prototype.livePreview = true;
+		mxVertexHandler.prototype.rotationEnabled = false;
+		// let imgSrc = 'https://cdn.sstatic.net/Sites/stackoverflow/company/img/logos/so/so-icon.png?v=c78bd457575a';
+		mxVertexHandler.prototype.createSizerShape = function(bounds, index, fillColor)
+		{
+    		if (this.handleImage != null)
+			{
+    				bounds = new mxRectangle(bounds.x, bounds.y, this.handleImage.width, this.handleImage.height);
+    				var shape = new mxImageShape(bounds, this.handleImage.src);
+
+    				// Allows HTML rendering of the images
+    				shape.preserveImageAspect = false;
+
+    				return shape;
+			}
+			else if (index == mxEvent.ROTATION_HANDLE)
+			{
+    			bounds = new mxRectangle(bounds.x, bounds.y, 20, 20);
+				// var shape = new mxImageShape(bounds, imgSrc);
+	
+				// Allows HTML rendering of the images
+				shape.preserveImageAspect = false;
+
+				return shape;
+			}
+			else
+			{
+    			return new mxRectangleShape(bounds, fillColor || mxConstants.HANDLE_FILLCOLOR, mxConstants.HANDLE_STROKECOLOR);
+			}
+		};
+		// Program starts here. Creates a sample graph in the
+		// DOM node with the specified ID. This function is invoked
+		// from the onLoad event handler of the document (see below).
+		function main(container)
+		{
+			// Checks if the browser is supported
+			if (!mxClient.isBrowserSupported())
+			{
+				// Displays an error message if the browser is not supported.
+				mxUtils.error('Browser is not supported!', 200, false);
+			}
+			else
+			{
+				// Disables the built-in context menu
+				mxEvent.disableContextMenu(container);
+				
+				// Creates the graph inside the given container
+				var graph = new mxGraph(container);
+				graph.setCellsCloneable(true);
+				graph.setHtmlLabels(true);
+				graph.setPanning(true);
+				graph.centerZoom = false;
+
+				// Enables rubberband selection
+				new mxRubberband(graph);
+
+				// Gets the default parent for inserting new cells. This
+				// is normally the first child of the root (ie. layer 0).
+				var parent = graph.getDefaultParent();
+								
+				// Adds cells to the model in a single step
+				graph.getModel().beginUpdate();
+				try
+				{
+					var v1 = graph.insertVertex(parent, null, '液位',
+						20, 20, 240, 120, 'shape=myShape;fillColor=none;pos1=30;pos2=80;polyCoords=[[10,10],[50,10],[50,100],[10,100],[0.75,1],[0.25,1],[0,0.75],[0,0.25]];');
+				}
+				finally
+				{
+					// Updates the display
+					graph.getModel().endUpdate();
+				}
+
+				document.body.appendChild(mxUtils.button('+', function()
+				{
+					graph.zoomIn();
+				}));
+				document.body.appendChild(mxUtils.button('-', function()
+				{
+                    var enc = new mxCodec();
+					var node = enc.encode(graph.getModel());
+					ss = mxUtils.getPrettyXml(node);
+                    console.log(ss);
+				}));
+			}
+		};
+	</script>
+</head>
+
+<!-- Page passes the container for the graph to the program -->
+<body onload="main(document.getElementById('graphContainer'))">
+
+	<!-- Creates a container for the graph with a grid wallpaper -->
+	<div id="graphContainer"
+		style="position:relative;overflow:hidden;width:621px;height:441px;background:url('editors/images/grid.gif');cursor:default;">
+	</div>
+</body>
+</html>
