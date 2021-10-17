@@ -52,6 +52,13 @@
 				</mxCell>
 			</Image>
 		</add>
+		<add as="myshape">
+			<MyShape label="MyShape" href="">
+				<mxCell vertex="1" style="myshape">	
+					<mxGeometry as="geometry" width="80" height="50"/>
+				</mxCell>
+			</MyShape>
+		</add>
 		<add as="rounded">
 			<Roundrect label="Rounded" href="">
 				<mxCell vertex="1" style="rounded">		
@@ -247,6 +254,14 @@
 				<add as="verticalAlign" value="middle"/>
 				<add as="image" value="images/draw/mxlogo.jpg"/>
 			</add>
+			<add as="myshape">
+				<add as="shape" value="myShape"/>
+				<add as="perimeter" value="rectanglePerimeter"/>
+				<add as="fontSize" value="10"/>
+				<add as="align" value="center"/>
+				<add as="verticalAlign" value="middle"/>
+				<add as="polyCoords" value="[[10,10],[50,10],[50,100],[10,100],[0.75,1],[0.25,1],[0,0.75],[0,0.25]]"/>
+			</add>
 		</mxStylesheet>
 		<mxGraphModel as="model">
 			<add as="valueForCellChanged"><![CDATA[
@@ -329,5 +344,6 @@
 		<add as="Cloud" template="cloud" style="cloud" icon="images/cloud.gif"/>
 		<add as="Line" template="hline" style="hline" icon="images/hline.gif"/>
 		<add as="Image" template="image" icon="images/image.gif"/>
+		<add as="MyShape" template="myshape" icon="images/aligntop.gif"/>
 	</mxDefaultToolbar>
 </mxEditor>
